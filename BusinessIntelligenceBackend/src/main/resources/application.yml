@@ -7,3 +7,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  data:
+    mongodb:
+      uri: mongodb://BI:secret@42.192.1.101:27017/mydb
