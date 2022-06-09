@@ -3,12 +3,12 @@ package com.example.businessintelligencebackend.controller;
 import com.example.businessintelligencebackend.dao.MovieQueryDAO;
 import com.example.businessintelligencebackend.dao.TimeQueryDAO;
 import com.example.businessintelligencebackend.service.SimpleQueryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-
-
 
 @RestController
 @CrossOrigin("*")
@@ -18,7 +18,6 @@ public class QueryController {
             new MovieQueryDAO("bolt://101.43.113.43/:7687", "neo4j", "Neo4j"),
             new TimeQueryDAO("bolt://101.43.113.43:7687", "neo4j", "Neo4j")
     );
-
 
     @ResponseBody
     @RequestMapping(value = "/actor", method = RequestMethod.GET)

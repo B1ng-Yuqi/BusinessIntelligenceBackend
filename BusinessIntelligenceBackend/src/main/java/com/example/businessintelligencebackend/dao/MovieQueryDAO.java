@@ -1,8 +1,10 @@
 package com.example.businessintelligencebackend.dao;
 
 import org.neo4j.driver.*;
+import org.neo4j.driver.Record;
 
 import java.util.List;
+
 
 public class MovieQueryDAO implements AutoCloseable{
 
@@ -19,7 +21,7 @@ public class MovieQueryDAO implements AutoCloseable{
     }
 
 
-    public List<Record>queryMovieByDirector (final String director){
+    public List<Record> queryMovieByDirector (final String director){
         try(Session session = driver.session()){
             List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
                 @Override
@@ -33,8 +35,6 @@ public class MovieQueryDAO implements AutoCloseable{
             return ans;
         }
     }
-
-
     public List<Record>queryMovieByActor (final String actor){
         try(Session session = driver.session()){
             List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
