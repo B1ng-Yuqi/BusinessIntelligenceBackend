@@ -21,4 +21,8 @@ public class CacheService {
     public List<SingleResult> queryAll(){
         return cacheRepository.findAll();
     }
+
+    public Boolean existsById(String id){
+        return cacheRepository.existsById(id);
+    }
 }

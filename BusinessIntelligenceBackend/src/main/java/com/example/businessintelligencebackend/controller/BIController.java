@@ -23,7 +23,8 @@ public class BIController {
     final private BIQueryService biQueryService = new BIQueryService(
             new BIQueryDAO("bolt://101.43.113.43/:7687", "neo4j", "Neo4j"));
 
-    private final CacheService cacheService = new CacheService();
+    @Autowired
+    private CacheService cacheService = new CacheService();
 
     Calendar calendar = Calendar.getInstance(); // 获取当前时间
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); //时间格式
@@ -34,15 +35,15 @@ public class BIController {
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String searchANode(@RequestParam("step") int step, @RequestParam("id") int id, @RequestParam("limit") int limit){
         String Id = ""+step+id+limit;
-        JSONObject result = cacheService.findOne(Id).getResult();
-        if(result == null){
+        if(!cacheService.existsById(Id)){
             HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTypeAndId(step,limit,id);
-            result = new JSONObject();
+            JSONObject result = new JSONObject();
             result.putAll(hashMap);
             String time = formatter.format(calendar.getTime());
             CacheEntity.SingleResult singleResult = new CacheEntity().new SingleResult(Id,time,result);
             cacheService.save(singleResult);
         }
+        JSONObject result = cacheService.findOne(Id).getResult();
         return result.toJSONString();
     }
 
