@@ -2,6 +2,8 @@ package com.example.businessintelligencebackend.dao;
 
 import org.neo4j.driver.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BIQueryDAO  implements AutoCloseable{
@@ -30,6 +32,20 @@ public class BIQueryDAO  implements AutoCloseable{
             return ans;
         }
     }
+    public List<Record> queryDouble (int step, int limit,int sourceId, int targetId){
+        try(Session session = driver.session()){
+            List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    String query = "MATCH p=((n)-[*1.."+step+"]-(m)) where id(n)="+sourceId+" and id(m)="+targetId+" return p limit " + limit;
+                    Result result = transaction.run(query);
+                    return result.list();
+                }
+            });
+            return ans;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         try (BIQueryDAO query = new BIQueryDAO("bolt://101.43.113.43:7687", "neo4j", "Neo4j")){
         }

@@ -47,4 +47,16 @@ public class BIController {
         return result.toJSONString();
     }
 
+    @RequestMapping(value = "searchByTwoNodes", method = RequestMethod.GET)
+    @ResponseBody
+    @CrossOrigin(maxAge = 3600, origins = "*")
+    public String searchByTwoNodes(@RequestParam("step") int step,
+            @RequestParam("limit") int limit, @RequestParam("sourceId") int sourceId, @RequestParam("targetId") int targetId){
+
+        HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTwoNodes(step, limit, sourceId, targetId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putAll(hashMap);
+        String results = jsonObject.toJSONString();
+        return results;
+    }
 }
