@@ -66,7 +66,7 @@ public class BIController {
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String getNodeId(@RequestParam("label") String label,@RequestParam("name") String name){
 
-        HashMap<String, String> hashMap = biQueryService.getAimID(label,name);
+        HashMap<String, Integer> hashMap = biQueryService.getAimID(label,name);
         JSONObject jsonObject = new JSONObject();
         jsonObject.putAll(hashMap);
         String results = jsonObject.toJSONString();

@@ -3,6 +3,7 @@ package com.example.businessintelligencebackend.service;
 import com.example.businessintelligencebackend.entity.NodeEntity;
 import com.example.businessintelligencebackend.entity.RelationEntity;
 import com.example.businessintelligencebackend.dao.BIQueryDAO;
+import io.swagger.models.auth.In;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Path;
@@ -19,10 +20,10 @@ public class BIQueryService {
         this.biQueryDAO = biQueryDAO;
     }
 
-    public HashMap<String, String> getAimID(final String label, final String name) {
+    public HashMap<String, Integer> getAimID(final String label, final String name) {
         Record record = biQueryDAO.getID(label, name);
-        HashMap<String, String> item = new HashMap<String, String>();
-        item.put("id", record.get("id").toString());
+        HashMap<String, Integer> item = new HashMap<String, Integer>();
+        item.put("id", record.get("id").asInt());
         return item;
     }
 
