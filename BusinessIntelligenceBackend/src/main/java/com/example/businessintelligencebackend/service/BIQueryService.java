@@ -22,6 +22,16 @@ public class BIQueryService {
     public HashMap<String, ArrayList<NodeEntity>> searchByTypeAndId(int step ,int limit,int id)
     {
         List<Record> result = biQueryDAO.querySingle(step,limit,id);
+        return getStringArrayListHashMap(result);
+    }
+
+    public HashMap<String, ArrayList<NodeEntity>> searchByTwoNodes( int step, int limit, int sourceId, int targetId)
+    {
+        List<Record> result=biQueryDAO.queryDouble(step,limit,sourceId,targetId);
+        return getStringArrayListHashMap(result);
+    }
+
+    private HashMap<String, ArrayList<NodeEntity>> getStringArrayListHashMap(List<Record> result) {
         HashMap<String,ArrayList<NodeEntity>> hashMap = new HashMap<>();
         ArrayList<NodeEntity> nodeList = new ArrayList<>();
         ArrayList<NodeEntity> relationList = new ArrayList<>();
@@ -48,38 +58,6 @@ public class BIQueryService {
         return hashMap;
     }
 
-    public HashMap<String, ArrayList<NodeEntity>> searchByTwoNodes( int step, int limit, int sourceId, int targetId)
-    {
-        List<Record> result=biQueryDAO.queryDouble(step,limit,sourceId,targetId);
-        HashMap<String,ArrayList<NodeEntity>> hashMap = new HashMap<>();
-        ArrayList<NodeEntity> nodeList = new ArrayList<>();
-        ArrayList<NodeEntity> relationList = new ArrayList<>();
-        int pathCount=0;
-        int validCount=0;
-        for(Record record:result){
-            pathCount++;
-            Path path = record.get("p").asPath();
-            if (containTarget(path, targetId)){
-                validCount++;
-            }
-        }
-        hashMap.put("nodes", nodeList);
-        hashMap.put("relations", deWeightRelation(relationList));
-        return hashMap;
-    }
-
-    private ArrayList<NodeEntity> deWeightRelation(ArrayList<NodeEntity> relationEntities){
-        ArrayList<NodeEntity> newRelations = new ArrayList<>();
-        for (NodeEntity relationEntity : relationEntities){
-            if (!newRelations.contains(relationEntity)){
-                newRelations.add(relationEntity);
-            }
-        }
-        return newRelations;
-    }
-
-
-
     private NodeEntity nodeToEntity(Node node){
         NodeEntity nodeEntity = null;
         if (node != null){
@@ -96,8 +74,8 @@ public class BIQueryService {
         RelationEntity relationEntity = null;
         if (relationship != null){
             relationEntity = new RelationEntity();
-//            relationEntity.put("id", relationship.id());
-            relationEntity.put("id", new Random().nextInt());
+            relationEntity.put("id", relationship.id());
+//            relationEntity.put("id", new Random().nextInt());
             relationEntity.put("source", relationship.startNodeId());
             relationEntity.put("target", relationship.endNodeId());
             relationEntity.put("label", relationship.type());
@@ -107,17 +85,6 @@ public class BIQueryService {
             return null;
         }
     }
-
-    private boolean containTarget(Path path, int targetId){
-        Iterable<Node> nodes = path.nodes();
-        for (Node node : nodes){
-            if (node.id() == targetId){
-                return true;
-            }
-        }
-        return false;
-    }
-
 
 
     public static void main(String[] args) {
