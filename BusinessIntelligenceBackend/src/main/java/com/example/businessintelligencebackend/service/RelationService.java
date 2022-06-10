@@ -1,6 +1,6 @@
 package com.example.businessintelligencebackend.service;
 
-import com.example.businessintelligencebackend.dao.RelationQueryDAO;
+import com.example.businessintelligencebackend.repository.RelationQueryDAO;
 import org.neo4j.driver.Record;
 
 import java.util.ArrayList;

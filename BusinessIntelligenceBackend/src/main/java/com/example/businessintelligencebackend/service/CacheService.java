@@ -1,6 +1,6 @@
 package com.example.businessintelligencebackend.service;
 
-import com.example.businessintelligencebackend.dao.CacheRepository;
+import com.example.businessintelligencebackend.repository.CacheRepository;
 import com.example.businessintelligencebackend.entity.CacheEntity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

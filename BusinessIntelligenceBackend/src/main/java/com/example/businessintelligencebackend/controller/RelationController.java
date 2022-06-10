@@ -1,6 +1,6 @@
 package com.example.businessintelligencebackend.controller;
 
-import com.example.businessintelligencebackend.dao.RelationQueryDAO;
+import com.example.businessintelligencebackend.repository.RelationQueryDAO;
 import com.example.businessintelligencebackend.service.RelationService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

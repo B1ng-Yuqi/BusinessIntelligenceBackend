@@ -1,10 +1,8 @@
 package com.example.businessintelligencebackend.controller;
 
-import com.example.businessintelligencebackend.dao.MovieQueryDAO;
-import com.example.businessintelligencebackend.dao.TimeQueryDAO;
+import com.example.businessintelligencebackend.repository.MovieQueryDAO;
+import com.example.businessintelligencebackend.repository.TimeQueryDAO;
 import com.example.businessintelligencebackend.service.SimpleQueryService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

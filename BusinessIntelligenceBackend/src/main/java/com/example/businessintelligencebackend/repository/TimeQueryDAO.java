@@ -1,4 +1,4 @@
-package com.example.businessintelligencebackend.dao;
+package com.example.businessintelligencebackend.repository;
 
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
