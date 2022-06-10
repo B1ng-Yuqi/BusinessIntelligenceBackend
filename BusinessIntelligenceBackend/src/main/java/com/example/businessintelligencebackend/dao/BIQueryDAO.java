@@ -5,6 +5,7 @@ import org.neo4j.driver.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class BIQueryDAO  implements AutoCloseable{
     private final Driver driver;
@@ -17,6 +18,30 @@ public class BIQueryDAO  implements AutoCloseable{
     public void close() throws Exception
     {
         driver.close();
+    }
+
+    public Record getID(String label,String name){
+        try(Session session = driver.session()){
+            Record ans = session.readTransaction(new TransactionWork<Record>() {
+                @Override
+                public Record execute(Transaction transaction) {
+                    String query = null;
+                    if(Objects.equals(label, "author"))
+                        query = "match (a:author) where a.name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                    else if(Objects.equals(label, "paper"))
+                        query= "match (a:paper) where a.title=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                    else if(Objects.equals(label,"interest"))
+                        query="match (a:interest) where a.interest_name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                    else if(Objects.equals(label,"publication"))
+                        query="match (a:publication) where a.publication_name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                    else
+                        query="match (a:affiliation) where a.affiliation_name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                    Result result = transaction.run(query);
+                    return result.single();
+                }
+            });
+            return ans;
+        }
     }
 
     public List<Record> querySingle (int step ,int limit,int id){

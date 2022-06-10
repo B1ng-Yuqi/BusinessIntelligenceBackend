@@ -19,6 +19,13 @@ public class BIQueryService {
         this.biQueryDAO = biQueryDAO;
     }
 
+    public HashMap<String, String> getAimID(final String label, final String name) {
+        Record record = biQueryDAO.getID(label, name);
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("id", record.get("id").toString());
+        return item;
+    }
+
     public HashMap<String, ArrayList<NodeEntity>> searchByTypeAndId(int step ,int limit,int id)
     {
         List<Record> result = biQueryDAO.querySingle(step,limit,id);

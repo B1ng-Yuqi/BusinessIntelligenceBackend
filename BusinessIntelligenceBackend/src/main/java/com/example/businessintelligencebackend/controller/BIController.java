@@ -59,4 +59,18 @@ public class BIController {
         String results = jsonObject.toJSONString();
         return results;
     }
+
+
+    @RequestMapping(value = "getID", method = RequestMethod.GET)
+    @ResponseBody
+    @CrossOrigin(maxAge = 3600, origins = "*")
+    public String getNodeId(@RequestParam("label") String label,@RequestParam("name") String name){
+
+        HashMap<String, String> hashMap = biQueryService.getAimID(label,name);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putAll(hashMap);
+        String results = jsonObject.toJSONString();
+        return results;
+    }
+
 }
