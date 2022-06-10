@@ -1,6 +1,5 @@
-package com.example.businessintelligencebackend.repository;
+package com.example.businessintelligencebackend.dao;
 
-import org.neo4j.cypherdsl.core.Statement;
 import org.neo4j.driver.*;
 
 import java.util.List;

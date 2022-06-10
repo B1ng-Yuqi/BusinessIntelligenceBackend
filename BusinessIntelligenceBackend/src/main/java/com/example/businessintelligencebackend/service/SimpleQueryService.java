@@ -1,8 +1,8 @@
 package com.example.businessintelligencebackend.service;
 
 
-import com.example.businessintelligencebackend.repository.MovieQueryDAO;
-import com.example.businessintelligencebackend.repository.TimeQueryDAO;
+import com.example.businessintelligencebackend.dao.MovieQueryDAO;
+import com.example.businessintelligencebackend.dao.TimeQueryDAO;
 import org.neo4j.driver.Record;
 
 import java.util.ArrayList;

@@ -2,8 +2,7 @@ package com.example.businessintelligencebackend.service;
 
 import com.example.businessintelligencebackend.entity.NodeEntity;
 import com.example.businessintelligencebackend.entity.RelationEntity;
-import com.example.businessintelligencebackend.repository.BIQueryDAO;
-import com.example.businessintelligencebackend.repository.RelationQueryDAO;
+import com.example.businessintelligencebackend.dao.BIQueryDAO;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Path;
@@ -22,7 +21,7 @@ public class BIQueryService {
 
     public HashMap<String, ArrayList<NodeEntity>> searchByTypeAndId(int step ,int limit,int id)
     {
-        List<Record> result=biQueryDAO.querySingle(step,limit,id);
+        List<Record> result = biQueryDAO.querySingle(step,limit,id);
         HashMap<String,ArrayList<NodeEntity>> hashMap = new HashMap<>();
         ArrayList<NodeEntity> nodeList = new ArrayList<>();
         ArrayList<NodeEntity> relationList = new ArrayList<>();
