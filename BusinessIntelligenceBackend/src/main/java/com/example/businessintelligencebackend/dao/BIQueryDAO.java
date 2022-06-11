@@ -1,6 +1,8 @@
 package com.example.businessintelligencebackend.dao;
 
+
 import org.neo4j.driver.*;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Objects;
 
 public class BIQueryDAO  implements AutoCloseable{
     private final Driver driver;
+
 
     public BIQueryDAO(String uri, String user, String password){
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
@@ -57,6 +60,24 @@ public class BIQueryDAO  implements AutoCloseable{
         }
     }
 
+    public List<Record> businessAffiliation(String name){
+        try(Session session = driver.session()){
+            List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    String query = "MATCH (n:author)-[r:is_interested_in]->(i:interest) where i.interest_name=\""+name+"\"  " +
+                            "with id(n) as id " +
+                            "Match (m:author)-[q:belong_to]->(p:affiliation) where id(m)=id " +
+                            "RETURN p ";
+                    Result result = transaction.run(query);
+                    return result.list();
+                }
+            });
+            return ans;
+        }
+    }
+
+
     public List<Record> querySingle (int step ,int limit,int id){
         try(Session session = driver.session()){
             List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
@@ -70,6 +91,8 @@ public class BIQueryDAO  implements AutoCloseable{
             return ans;
         }
     }
+
+
     public List<Record> queryDouble (int step, int limit,int sourceId, int targetId){
         try(Session session = driver.session()){
             List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
@@ -83,6 +106,7 @@ public class BIQueryDAO  implements AutoCloseable{
             return ans;
         }
     }
+
 
     public static void main(String[] args) throws Exception {
         try (BIQueryDAO query = new BIQueryDAO("bolt://101.43.113.43:7687", "neo4j", "Neo4j")){

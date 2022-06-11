@@ -47,6 +47,38 @@ public class BIQueryService {
         hashMap.put("nodes",nodeEntity);
         return hashMap;
     }
+    public HashMap<String, NodeEntity> getBusinessAffiliation(final String name) {
+        List<Record> recordList = biQueryDAO.businessAffiliation(name);
+        NodeEntity nodeEntity=new NodeEntity();
+        HashMap<Node,Integer>count =new HashMap<>();
+        HashMap<String,NodeEntity> ans = new HashMap<>();
+        Node aim=null;
+        int max=0;
+        for (Record record : recordList) {
+            Node node =record.get("p").asNode();
+            if(!count.containsKey(node))
+            {
+                count.put(node,1);
+            }
+            else
+            {
+                int new_count=count.get(node);
+                int replace = new_count+1;
+                count.replace(node,replace);
+            }
+        }
+        for (Node key : count.keySet()) {
+            if(count.get(key)>=max){
+                aim=key;
+            }
+        }
+        nodeEntity = nodeToEntity(aim);
+        ans.put("nodes",nodeEntity);
+        return ans;
+    }
+
+
+
 
     public HashMap<String, ArrayList<NodeEntity>> searchByTypeAndId(int step ,int limit,int id)
     {

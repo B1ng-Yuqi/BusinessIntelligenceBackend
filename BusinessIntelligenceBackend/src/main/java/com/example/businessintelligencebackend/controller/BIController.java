@@ -85,4 +85,16 @@ public class BIController {
         return results;
     }
 
+    @RequestMapping(value = "getAffiliation", method = RequestMethod.GET)
+    @ResponseBody
+    @CrossOrigin(maxAge = 3600, origins = "*")
+    public String getBusinessAffiliation(@RequestParam("name") String name){
+
+        HashMap<String, NodeEntity> hashMap = biQueryService.getBusinessAffiliation(name);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putAll(hashMap);
+        String results = jsonObject.toJSONString();
+        return results;
+    }
+
 }
