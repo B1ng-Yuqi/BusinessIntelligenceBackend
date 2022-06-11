@@ -27,7 +27,7 @@ public class BIQueryDAO  implements AutoCloseable{
                 public Record execute(Transaction transaction) {
                     String query = null;
                     if(Objects.equals(label, "author"))
-                        query = "match (a:author) where a.name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
+                        query = "match (a:author) where a.name=\""+ name + "\" return id(a) as id limit 1 ;";
                     else if(Objects.equals(label, "paper"))
                         query= "match (a:paper) where a.title=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
                     else if(Objects.equals(label,"interest"))
@@ -38,6 +38,19 @@ public class BIQueryDAO  implements AutoCloseable{
                         query="match (a:affiliation) where a.affiliation_name=~\"(?i).*"+ name + ".*\" return id(a) as id limit 1 ;";
                     Result result = transaction.run(query);
                     return result.single();
+                }
+            });
+            return ans;
+        }
+    }
+    public List<Record> businessAuthor(String name){
+        try(Session session = driver.session()){
+            List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    String query = "MATCH (p:author)-[r:is_interested_in]->(b:interest) where b.interest_name=\""+name+"\" RETURN p order by p.h_index DESC LIMIT 25 ";
+                    Result result = transaction.run(query);
+                    return result.list();
                 }
             });
             return ans;

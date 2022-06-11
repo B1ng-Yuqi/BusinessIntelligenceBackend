@@ -27,6 +27,27 @@ public class BIQueryService {
         return item;
     }
 
+    public HashMap<String, NodeEntity> getBusinessAuthor(final String name) {
+        List<Record> recordList = biQueryDAO.businessAuthor(name);
+        NodeEntity nodeEntity=new NodeEntity();
+        HashMap<String,NodeEntity> hashMap = new HashMap<>();
+        int max=0;
+        float h_max=0;
+        for (Record record : recordList) {
+            Node node =record.get("p").asNode();
+            float now = Float.parseFloat(node.get("h_index").toString().replace("\"", ""));
+            int citation = Integer.parseInt(node.get("total_citations").toString().replace("\"", ""));
+            if (now >= h_max)
+                if (citation >= max) {
+                    max=citation;
+                    h_max=now;
+                    nodeEntity = nodeToEntity(node);
+                }
+        }
+        hashMap.put("nodes",nodeEntity);
+        return hashMap;
+    }
+
     public HashMap<String, ArrayList<NodeEntity>> searchByTypeAndId(int step ,int limit,int id)
     {
         List<Record> result = biQueryDAO.querySingle(step,limit,id);
