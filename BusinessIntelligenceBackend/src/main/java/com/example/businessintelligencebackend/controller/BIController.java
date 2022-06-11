@@ -97,4 +97,16 @@ public class BIController {
         return results;
     }
 
+    @RequestMapping(value = "getPublication", method = RequestMethod.GET)
+    @ResponseBody
+    @CrossOrigin(maxAge = 3600, origins = "*")
+    public String getBusinessPublication(@RequestParam("name") String name){
+
+        HashMap<String, NodeEntity> hashMap = biQueryService.getBusinessPublication(name);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.putAll(hashMap);
+        String results = jsonObject.toJSONString();
+        return results;
+    }
+
 }

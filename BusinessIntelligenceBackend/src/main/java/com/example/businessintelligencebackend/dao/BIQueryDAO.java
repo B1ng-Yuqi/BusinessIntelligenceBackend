@@ -77,6 +77,25 @@ public class BIQueryDAO  implements AutoCloseable{
         }
     }
 
+    public List<Record> businessPublication(String name){
+        try(Session session = driver.session()){
+            List<Record> ans = session.readTransaction(new TransactionWork<List<Record>>() {
+                @Override
+                public List<Record> execute(Transaction transaction) {
+                    String query = "MATCH (n:author)-[r:is_interested_in]->(i:interest) where i.interest_name=\""+name +"\" " +
+                            "with id(n) as id " +
+                            "Match (m:author)-[q:write]->(s:paper) where id(m)=id " +
+                            "with id(s) as sid " +
+                            "Match (z:paper)<-[y:publish]-(p:publication) where id(z)=sid " +
+                            "return p ";
+                    Result result = transaction.run(query);
+                    return result.list();
+                }
+            });
+            return ans;
+        }
+    }
+
 
     public List<Record> querySingle (int step ,int limit,int id){
         try(Session session = driver.session()){
