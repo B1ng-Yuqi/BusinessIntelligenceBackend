@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -40,8 +39,8 @@ public class BIController {
             JSONObject result = new JSONObject();
             result.putAll(hashMap);
             String time = formatter.format(calendar.getTime());
-            CacheEntity.SingleResult singleResult = new CacheEntity().new SingleResult(Id,time,result);
-            cacheService.save(singleResult);
+            CacheEntity.cacheResult cacheResult = new CacheEntity().new cacheResult(Id,time,result);
+            cacheService.save(cacheResult);
         }
         JSONObject result = cacheService.findOne(Id).getResult();
         return result.toJSONString();
@@ -52,12 +51,17 @@ public class BIController {
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String searchByTwoNodes(@RequestParam("step") int step,
             @RequestParam("limit") int limit, @RequestParam("sourceId") int sourceId, @RequestParam("targetId") int targetId){
-
-        HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTwoNodes(step, limit, sourceId, targetId);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.putAll(hashMap);
-        String results = jsonObject.toJSONString();
-        return results;
+        String Id = ""+step+limit+sourceId+targetId;
+        if(!cacheService.existsById(Id)){
+            HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTwoNodes(step, limit, sourceId, targetId);
+            JSONObject result = new JSONObject();
+            result.putAll(hashMap);
+            String time = formatter.format(calendar.getTime());
+            CacheEntity.cacheResult cacheResult = new CacheEntity().new cacheResult(Id,time,result);
+            cacheService.save(cacheResult);
+        }
+        JSONObject result = cacheService.findOne(Id).getResult();
+        return result.toJSONString();
     }
 
 
@@ -65,7 +69,6 @@ public class BIController {
     @ResponseBody
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String getNodeId(@RequestParam("label") String label,@RequestParam("name") String name){
-
         HashMap<String, Integer> hashMap = biQueryService.getAimID(label,name);
         JSONObject jsonObject = new JSONObject();
         jsonObject.putAll(hashMap);
@@ -77,7 +80,6 @@ public class BIController {
     @ResponseBody
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String getBusinessAuthor(@RequestParam("name") String name){
-
         HashMap<String, NodeEntity> hashMap = biQueryService.getBusinessAuthor(name);
         JSONObject jsonObject = new JSONObject();
         jsonObject.putAll(hashMap);
@@ -89,7 +91,6 @@ public class BIController {
     @ResponseBody
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String getBusinessAffiliation(@RequestParam("name") String name){
-
         HashMap<String, NodeEntity> hashMap = biQueryService.getBusinessAffiliation(name);
         JSONObject jsonObject = new JSONObject();
         jsonObject.putAll(hashMap);
@@ -101,7 +102,6 @@ public class BIController {
     @ResponseBody
     @CrossOrigin(maxAge = 3600, origins = "*")
     public String getBusinessPublication(@RequestParam("name") String name){
-
         HashMap<String, NodeEntity> hashMap = biQueryService.getBusinessPublication(name);
         JSONObject jsonObject = new JSONObject();
         jsonObject.putAll(hashMap);

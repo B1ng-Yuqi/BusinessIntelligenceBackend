@@ -8,11 +8,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 public class CacheEntity {
-    @Document(collection = "single")
+    @Document(collection = "cache")
     @Data
     @AllArgsConstructor
     @ToString
-    public class SingleResult {
+    public class cacheResult {
         @Id
         private String id;
         private String time;

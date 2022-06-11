@@ -12,7 +12,6 @@ import java.util.Objects;
 public class BIQueryDAO  implements AutoCloseable{
     private final Driver driver;
 
-
     public BIQueryDAO(String uri, String user, String password){
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
