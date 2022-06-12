@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 @RestController
@@ -25,9 +26,6 @@ public class BIController {
     @Autowired
     private CacheService cacheService = new CacheService();
 
-    Calendar calendar = Calendar.getInstance(); // 获取当前时间
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); //时间格式
-
 
     @RequestMapping(value = "searchANode", method = RequestMethod.GET)
     @ResponseBody
@@ -38,7 +36,7 @@ public class BIController {
             HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTypeAndId(step,limit,id);
             JSONObject result = new JSONObject();
             result.putAll(hashMap);
-            String time = formatter.format(calendar.getTime());
+            Date time = new Date();
             CacheEntity.cacheResult cacheResult = new CacheEntity().new cacheResult(Id,time,result);
             cacheService.save(cacheResult);
         }
@@ -56,7 +54,7 @@ public class BIController {
             HashMap<String, ArrayList<NodeEntity>> hashMap = biQueryService.searchByTwoNodes(step, limit, sourceId, targetId);
             JSONObject result = new JSONObject();
             result.putAll(hashMap);
-            String time = formatter.format(calendar.getTime());
+            Date time = new Date();
             CacheEntity.cacheResult cacheResult = new CacheEntity().new cacheResult(Id,time,result);
             cacheService.save(cacheResult);
         }

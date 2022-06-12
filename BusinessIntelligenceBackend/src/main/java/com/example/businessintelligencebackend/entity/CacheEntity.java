@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 public class CacheEntity {
     @Document(collection = "cache")
     @Data
@@ -14,8 +16,8 @@ public class CacheEntity {
     @ToString
     public class cacheResult {
         @Id
-        private String id;
-        private String time;
+        private String id;  
+        private Date time;
         private JSONObject result;
 
     }
